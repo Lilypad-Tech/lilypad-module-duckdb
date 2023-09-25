@@ -1,57 +1,64 @@
 {
-    "APIVersion": "V1beta1",
-    "Metadata": {
-        "CreatedAt": "0001-01-01T00:00:00Z",
-        "Requester": {}
+    "machine": {
+        "gpu": 0,
+        "cpu": 1000,
+        "ram": 100
     },
-    "Spec": {
-        "Engine": "Docker",
-        "Verifier": "Noop",
-        "Publisher": "Estuary",
-        "PublisherSpec": {
-            "Type": "Estuary"
+    "job": {
+        "APIVersion": "V1beta1",
+        "Metadata": {
+            "CreatedAt": "0001-01-01T00:00:00Z",
+            "Requester": {}
         },
-        "Docker": {
-            "Image": "31z4/bacalhau-duckdb:0.0.1",
-            "Entrypoint": [
-                "./duckdb",
-                "-init",
-                "/init.sql",
-                "-echo",
-                "-s",
-                {{.Query}}
+        "Spec": {
+            "Engine": "Docker",
+            "Verifier": "Noop",
+            "Publisher": "Estuary",
+            "PublisherSpec": {
+                "Type": "Estuary"
+            },
+            "Docker": {
+                "Image": "31z4/bacalhau-duckdb:0.0.1",
+                "Entrypoint": [
+                    "./duckdb",
+                    "-init",
+                    "/init.sql",
+                    "-echo",
+                    "-s",
+                    {{.Query}}
+                ],
+            },
+            "Language": {
+                "JobContext": {}
+            },
+            "Wasm": {
+                "EntryModule": {}
+            },
+            "Resources": {
+                "GPU": ""
+            },
+            "Network": {
+                "Type": "None"
+            },
+            "Timeout": 1800,
+            "inputs": [
+                {
+                    "StorageSource": "IPFS",
+                    "Name": "inputs",
+                    "CID": {{.InputsCID}},
+                    "path": "/inputs"
+                }
             ],
+            "outputs": [
+                {
+                    "StorageSource": "IPFS",
+                    "Name": "outputs",
+                    "path": "/outputs"
+                }
+            ],
+            "Deal": {
+                "Concurrency": 1
+            },
         },
-        "Language": {
-            "JobContext": {}
-        },
-        "Wasm": {
-            "EntryModule": {}
-        },
-        "Resources": {
-            "GPU": ""
-        },
-        "Network": {
-            "Type": "None"
-        },
-        "Timeout": 1800,
-        "inputs": [
-            {
-                "StorageSource": "IPFS",
-                "Name": "inputs",
-                "CID": {{.InputsCID}},
-                "path": "/inputs"
-            }
-        ],
-        "outputs": [
-            {
-                "StorageSource": "IPFS",
-                "Name": "outputs",
-                "path": "/outputs"
-            }
-        ],
-        "Deal": {
-            "Concurrency": 1
-        },
-    },
+    }
 }
